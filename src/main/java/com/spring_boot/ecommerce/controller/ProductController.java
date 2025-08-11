@@ -4,6 +4,7 @@ import com.spring_boot.ecommerce.model.Product;
 import com.spring_boot.ecommerce.payload.ProductDTO;
 import com.spring_boot.ecommerce.payload.ProductResponse;
 import com.spring_boot.ecommerce.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +20,12 @@ public class ProductController {
     }
 
     @PostMapping("/admin/categories/{categoryId}/product")
-    public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO productDTO, @PathVariable  Long categoryId){
-        ProductDTO productDTO = productService.addProduct(categoryId, productDTO);
-        return new ResponseEntity<>(productDTO, HttpStatus.CREATED);
+    public ResponseEntity<ProductDTO> addProduct(
+            @Valid @RequestBody ProductDTO productDTO,
+            @PathVariable  Long categoryId
+    ){
+        ProductDTO savedProductDTO = productService.addProduct(categoryId, productDTO);
+        return new ResponseEntity<>(savedProductDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/public/products")
@@ -50,7 +54,7 @@ public class ProductController {
 
     @PutMapping("admin/products/{productId}")
     public ResponseEntity<ProductDTO> updateProduct(
-            @RequestBody ProductDTO productDTO,
+            @Valid @RequestBody ProductDTO productDTO,
             @PathVariable Long productId
     ){
         ProductDTO savedProductDTO = productService.updateProduct(productId, productDTO);
