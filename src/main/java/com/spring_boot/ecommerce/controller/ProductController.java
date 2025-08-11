@@ -44,10 +44,27 @@ public class ProductController {
     public ResponseEntity<ProductResponse> getProductsByKeyword(
             @PathVariable String keyword
     ){
-        ProductResponse productResponse = productService.searchProductByKeyword(keyword);
+        ProductResponse productResponse = productService.searchProductByKeyword("%" +keyword+ "%");
 
         return new ResponseEntity<ProductResponse>(productResponse, HttpStatus.FOUND);
+    }
 
+    @PutMapping("admin/products/{productId}")
+    public ResponseEntity<ProductDTO> updateProduct(
+            @RequestBody ProductDTO productDTO,
+            @PathVariable Long productId
+    ){
+        ProductDTO savedProductDTO = productService.updateProduct(productId, productDTO);
+
+        return new ResponseEntity<ProductDTO>( savedProductDTO,HttpStatus.OK);
+    }
+
+    @DeleteMapping("admin/products/{productId}")
+    public ResponseEntity<ProductDTO> deleteProduct(@PathVariable Long productId){
+
+        ProductDTO productDTO = productService.deleteById(productId);
+
+        return new ResponseEntity<ProductDTO>(productDTO, HttpStatus.OK);
     }
 
 }
