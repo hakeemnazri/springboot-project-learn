@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,6 +52,33 @@ public class ProductServiceImpl implements ProductService{
 
         ProductResponse productResponse = new ProductResponse();
         productResponse.setContent(productDTOs);
+
+        return productResponse;
+    }
+
+    @Override
+    public ProductResponse searchByCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(categoryId, "Category", "categoryId"));
+
+        List<Product> byCategoryOrderByPriceAsc = productRepository.findByCategoryOrderByPriceAsc(category);
+
+        List<ProductDTO> productDTOs = byCategoryOrderByPriceAsc.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
+
+        ProductResponse productResponse = new ProductResponse();
+        productResponse.setContent(productDTOs);
+
+        return productResponse;
+    }
+
+    @Override
+    public ProductResponse searchProductByKeyword(String keyword) {
+        List<Product> byProductNameLikeIgnoreCase = productRepository.findByProductNameLikeIgnoreCase(keyword);
+
+        List<ProductDTO> productDTOS = byProductNameLikeIgnoreCase.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
+
+        ProductResponse productResponse = new ProductResponse();
+
+        productResponse.setContent(productDTOS);
 
         return productResponse;
     }
