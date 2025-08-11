@@ -1,5 +1,6 @@
 package com.spring_boot.ecommerce.controller;
 
+import com.spring_boot.ecommerce.config.AppConstants;
 import com.spring_boot.ecommerce.model.Product;
 import com.spring_boot.ecommerce.payload.ProductDTO;
 import com.spring_boot.ecommerce.payload.ProductResponse;
@@ -29,8 +30,13 @@ public class ProductController {
     }
 
     @GetMapping("/public/products")
-    public ResponseEntity<ProductResponse> getAllProducts(){
-        ProductResponse allProducts = productService.getAllProducts();
+    public ResponseEntity<ProductResponse> getAllProducts(
+            @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER) Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE) Integer pageSize,
+            @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_PRODUCTS_BY) String sortBy,
+            @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_DIR) String sortOrder
+    ){
+        ProductResponse allProducts = productService.getAllProducts(pageNumber, pageSize, sortBy, sortOrder);
         return new ResponseEntity<ProductResponse>(allProducts, HttpStatus.OK);
     }
 
