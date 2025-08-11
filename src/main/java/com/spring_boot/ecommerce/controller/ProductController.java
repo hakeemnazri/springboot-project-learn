@@ -49,7 +49,7 @@ public class ProductController {
         return new ResponseEntity<ProductResponse>(productResponse, HttpStatus.FOUND);
     }
 
-    @PutMapping("")
+    @PutMapping("admin/products/{productId}")
     public ResponseEntity<ProductDTO> updateProduct(
             @RequestBody ProductDTO productDTO,
             @PathVariable Long productId
@@ -57,6 +57,14 @@ public class ProductController {
         ProductDTO savedProductDTO = productService.updateProduct(productId, productDTO);
 
         return new ResponseEntity<ProductDTO>( savedProductDTO,HttpStatus.OK);
+    }
+
+    @DeleteMapping("admin/products/{productId}")
+    public ResponseEntity<ProductDTO> deleteProduct(@PathVariable Long productId){
+
+        ProductDTO productDTO = productService.deleteById(productId);
+
+        return new ResponseEntity<ProductDTO>(productDTO, HttpStatus.OK);
     }
 
 }
