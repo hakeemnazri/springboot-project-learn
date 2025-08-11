@@ -7,7 +7,7 @@ import com.spring_boot.ecommerce.payload.ProductResponse;
 import java.util.List;
 
 public interface ProductService {
-    ProductDTO addProduct(Long categoryId, Product product);
+    ProductDTO addProduct(Long categoryId, ProductDTO productDTO);
 
     ProductResponse getAllProducts();
 
