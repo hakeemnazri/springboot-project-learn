@@ -1,5 +1,6 @@
 package com.spring_boot.ecommerce.service;
 
+import com.spring_boot.ecommerce.exceptions.APIException;
 import com.spring_boot.ecommerce.exceptions.ResourceNotFoundException;
 import com.spring_boot.ecommerce.model.Category;
 import com.spring_boot.ecommerce.model.Product;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -34,16 +34,30 @@ public class ProductServiceImpl implements ProductService{
     public ProductDTO addProduct(Long categoryId, ProductDTO productDTO) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(categoryId, "Category", "categoryId"));
 
-        Product product = productRepository.findById(productDTO.getProductId()).orElseThrow(() -> new ResourceNotFoundException(productDTO.getProductId(), "ProductDTO", "ProductDTO.id"));
+        boolean isProductPresent = false;
 
-        product.setImage("default.png");
-        product.setCategory(category);
-        double specialPrice = product.getPrice() - ((product.getDiscount() * 0.01) * product.getPrice());
-        product.setSpecialPrice(specialPrice);
+        List<Product> byProductNameLikeIgnoreCase = productRepository.findByCategoryOrderByPriceAsc(category);
 
-        Product saveProduct = productRepository.save(product);
+        for (Product product : byProductNameLikeIgnoreCase){
+            if(product.getProductName().equals(productDTO.getProductName())){
+                isProductPresent = true;
+                break;
+            }
+        }
 
-        return modelMapper.map(saveProduct, ProductDTO.class);
+        if(isProductPresent){
+            throw new APIException("Product is present");
+        }else{
+            Product newProduct = modelMapper.map(productDTO, Product.class);
+            newProduct.setImage("default.png");
+            newProduct.setCategory(category);
+            double specialPrice = newProduct.getPrice() - ((newProduct.getDiscount() * 0.01) * newProduct.getPrice());
+            newProduct.setSpecialPrice(specialPrice);
+            Product savedProduct = productRepository.save(newProduct);
+
+            return modelMapper.map(newProduct, ProductDTO.class);
+        }
+
 
     }
 

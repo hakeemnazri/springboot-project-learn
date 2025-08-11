@@ -1,6 +1,5 @@
 package com.spring_boot.ecommerce.service;
 
-import com.spring_boot.ecommerce.model.Product;
 import com.spring_boot.ecommerce.payload.ProductDTO;
 import com.spring_boot.ecommerce.payload.ProductResponse;
 
