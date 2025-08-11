@@ -3,12 +3,10 @@ package com.spring_boot.ecommerce.service;
 import com.spring_boot.ecommerce.payload.ProductDTO;
 import com.spring_boot.ecommerce.payload.ProductResponse;
 
-import java.util.List;
-
 public interface ProductService {
     ProductDTO addProduct(Long categoryId, ProductDTO productDTO);
 
-    ProductResponse getAllProducts();
+    ProductResponse getAllProducts(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
     ProductResponse searchByCategory(Long categoryId);
 
