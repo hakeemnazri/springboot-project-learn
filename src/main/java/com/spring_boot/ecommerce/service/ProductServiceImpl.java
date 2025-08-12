@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService{
 
         boolean isProductPresent = false;
 
-        List<Product> byProductNameLikeIgnoreCase = productRepository.findByCategoryOrderByPriceAsc(category);
+        List<Product> byProductNameLikeIgnoreCase = category.getProducts();
 
         for (Product product : byProductNameLikeIgnoreCase){
             if(product.getProductName().equals(productDTO.getProductName())){
@@ -89,28 +89,50 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public ProductResponse searchByCategory(Long categoryId) {
+    public ProductResponse searchByCategory(Long categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(categoryId, "Category", "categoryId"));
 
-        List<Product> byCategoryOrderByPriceAsc = productRepository.findByCategoryOrderByPriceAsc(category);
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
-        List<ProductDTO> productDTOs = byCategoryOrderByPriceAsc.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+
+        Page<Product> byCategoryOrderByPriceAsc = productRepository.findByCategoryOrderByPriceAsc(category, pageDetails);
+
+        List<Product> productList = byCategoryOrderByPriceAsc.getContent();
+
+        List<ProductDTO> productDTOs = productList.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
 
         ProductResponse productResponse = new ProductResponse();
         productResponse.setContent(productDTOs);
+        productResponse.setPageNumber(byCategoryOrderByPriceAsc.getNumber());
+        productResponse.setPageSize(byCategoryOrderByPriceAsc.getSize());
+        productResponse.setTotalPages(byCategoryOrderByPriceAsc.getTotalPages());
+        productResponse.setTotalElements(byCategoryOrderByPriceAsc.getTotalElements());
+        productResponse.setLastPage(byCategoryOrderByPriceAsc.isLast());
 
         return productResponse;
     }
 
     @Override
-    public ProductResponse searchProductByKeyword(String keyword) {
-        List<Product> byProductNameLikeIgnoreCase = productRepository.findByProductNameLikeIgnoreCase(keyword);
+    public ProductResponse searchProductByKeyword(String keyword, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
 
-        List<ProductDTO> productDTOS = byProductNameLikeIgnoreCase.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+
+        Page<Product> byProductNameLikeIgnoreCase = productRepository.findByProductNameLikeIgnoreCase(keyword, pageDetails);
+
+        List<Product> productList = byProductNameLikeIgnoreCase.getContent();
+
+        List<ProductDTO> productDTOS = productList.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
 
         ProductResponse productResponse = new ProductResponse();
-
         productResponse.setContent(productDTOS);
+        productResponse.setPageNumber(byProductNameLikeIgnoreCase.getNumber());
+        productResponse.setPageSize(byProductNameLikeIgnoreCase.getSize());
+        productResponse.setTotalPages(byProductNameLikeIgnoreCase.getTotalPages());
+        productResponse.setTotalElements(byProductNameLikeIgnoreCase.getTotalElements());
+        productResponse.setLastPage(byProductNameLikeIgnoreCase.isLast());
 
         return productResponse;
     }
