@@ -24,80 +24,80 @@ import javax.sql.DataSource;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-@Configuration
-@EnableWebSecurity
-@EnableMethodSecurity
-public class SecurityConfig {
-
-    @Autowired
-    private DataSource dataSource;
-
-    @Autowired
-    private AuthEntryPointJwt authEntryPointJwt;
-
-    @Bean
-    public AuthTokenFilter authTokenFilter(){
-        return new AuthTokenFilter();
-    }
-
-    @Bean
-    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests((requests) ->
-                requests.requestMatchers("/signin").permitAll()
-                .anyRequest().authenticated()
-        );
-        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//        http.formLogin(withDefaults());
-//        http.httpBasic(withDefaults());
-        http.exceptionHandling(
-                e -> e.authenticationEntryPoint(authEntryPointJwt)
-        );
-
-        http.addFilterBefore(
-                authTokenFilter(),
-                UsernamePasswordAuthenticationFilter.class
-                );
-        return http.build();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService(){
-
-        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-
-        // Check if user exists before creating
-        /*
-
-        if (!jdbcUserDetailsManager.userExists("user1")) {
-            UserDetails user1 = User.withDefaultPasswordEncoder()
-                    .username("user1")
-                    .password("password123")
-                    .roles("USER")
-                    .build();
-            jdbcUserDetailsManager.createUser(user1);
-        }
-
-        if (!jdbcUserDetailsManager.userExists("admin")) {
-            UserDetails admin = User.withDefaultPasswordEncoder()
-                    .username("admin")
-                    .password("admin123")
-                    .roles("ADMIN", "USER")
-                    .build();
-            jdbcUserDetailsManager.createUser(admin);
-        }
-         */
-
-        return jdbcUserDetailsManager;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
-
-}
+//@Configuration
+//@EnableWebSecurity
+//@EnableMethodSecurity
+//public class SecurityConfig {
+//
+//    @Autowired
+//    private DataSource dataSource;
+//
+//    @Autowired
+//    private AuthEntryPointJwt authEntryPointJwt;
+//
+//    @Bean
+//    public AuthTokenFilter authTokenFilter(){
+//        return new AuthTokenFilter();
+//    }
+//
+//    @Bean
+//    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+//        http.authorizeHttpRequests((requests) ->
+//                requests.requestMatchers("/signin").permitAll()
+//                .anyRequest().authenticated()
+//        );
+//        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+////        http.formLogin(withDefaults());
+////        http.httpBasic(withDefaults());
+//        http.exceptionHandling(
+//                e -> e.authenticationEntryPoint(authEntryPointJwt)
+//        );
+//
+//        http.addFilterBefore(
+//                authTokenFilter(),
+//                UsernamePasswordAuthenticationFilter.class
+//                );
+//        return http.build();
+//    }
+//
+//    @Bean
+//    public UserDetailsService userDetailsService(){
+//
+//        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+//
+//        // Check if user exists before creating
+//        /*
+//
+//        if (!jdbcUserDetailsManager.userExists("user1")) {
+//            UserDetails user1 = User.withDefaultPasswordEncoder()
+//                    .username("user1")
+//                    .password("password123")
+//                    .roles("USER")
+//                    .build();
+//            jdbcUserDetailsManager.createUser(user1);
+//        }
+//
+//        if (!jdbcUserDetailsManager.userExists("admin")) {
+//            UserDetails admin = User.withDefaultPasswordEncoder()
+//                    .username("admin")
+//                    .password("admin123")
+//                    .roles("ADMIN", "USER")
+//                    .build();
+//            jdbcUserDetailsManager.createUser(admin);
+//        }
+//         */
+//
+//        return jdbcUserDetailsManager;
+//    }
+//
+//    @Bean
+//    public PasswordEncoder passwordEncoder(){
+//        return new BCryptPasswordEncoder();
+//    }
+//
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+//        return authConfig.getAuthenticationManager();
+//    }
+//
+//}
