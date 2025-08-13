@@ -66,6 +66,8 @@ public class SecurityConfig {
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
 
         // Check if user exists before creating
+        /*
+
         if (!jdbcUserDetailsManager.userExists("user1")) {
             UserDetails user1 = User.withDefaultPasswordEncoder()
                     .username("user1")
@@ -83,6 +85,7 @@ public class SecurityConfig {
                     .build();
             jdbcUserDetailsManager.createUser(admin);
         }
+         */
 
         return jdbcUserDetailsManager;
     }
