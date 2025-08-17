@@ -1,4 +1,4 @@
-package com.spring_boot.ecommerce.trainSecurity;
+package com.spring_boot.ecommerce.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

@@ -1,4 +1,4 @@
-package com.spring_boot.ecommerce.trainSecurity;
+package com.spring_boot.ecommerce.security.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

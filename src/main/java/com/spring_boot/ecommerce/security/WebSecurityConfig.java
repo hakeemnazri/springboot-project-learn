@@ -2,15 +2,12 @@ package com.spring_boot.ecommerce.security;
 
 
 import com.spring_boot.ecommerce.security.jwt.services.UserDetailsServiceImpl;
-import com.spring_boot.ecommerce.trainSecurity.AuthEntryPointJwt;
-import com.spring_boot.ecommerce.trainSecurity.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;

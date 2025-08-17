@@ -1,6 +1,7 @@
 package com.spring_boot.ecommerce.security.jwt.services;
 
 import com.spring_boot.ecommerce.model.User;
+import com.spring_boot.ecommerce.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
