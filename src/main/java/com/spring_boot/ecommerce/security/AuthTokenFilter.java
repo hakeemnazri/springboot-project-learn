@@ -29,7 +29,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     private static  final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         logger.debug("AuthTokenFilter called for URI: {}", request.getRequestURI());
@@ -37,9 +36,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         try {
             String jwt = parseJwt(request);
             if(jwt != null && jwtUtils.validateJwtToken(jwt)){
-                String usernameFromJwtTOken = jwtUtils.getUsernameFromJwtToken(jwt);
+                String usernameFromJwtToken = jwtUtils.getUsernameFromJwtToken(jwt);
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(usernameFromJwtTOken);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(usernameFromJwtToken);
 
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails,

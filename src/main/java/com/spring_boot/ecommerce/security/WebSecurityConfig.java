@@ -2,6 +2,7 @@ package com.spring_boot.ecommerce.security;
 
 
 import com.spring_boot.ecommerce.security.jwt.services.UserDetailsServiceImpl;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,7 +52,13 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((requests) ->
                 requests
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**").permitAll().requestMatchers("/swagger-ui/**").permitAll().requestMatchers("/api/public/**").permitAll().requestMatchers("/api/admin/**").permitAll().requestMatchers("/api/test/**").permitAll().requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+//                        .requestMatchers("/api/public/**").permitAll()
+//                        .requestMatchers("/api/admin/**").permitAll()
+
+                        .requestMatchers("/api/test/**").permitAll()
+                        .requestMatchers("/images/**").permitAll()
                         .anyRequest().authenticated()
         );
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -65,7 +72,8 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    @Bean
+    public AuthenticationManager authenticationManager( AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
