@@ -23,11 +23,8 @@ public class Order {
     @Email
     @Column(nullable = false)
     private String email;
-
     private LocalDate orderDate;
-
     private Double totalAmount;
-
     private String orderStatus;
 
     @OneToOne

@@ -14,12 +14,9 @@ import com.spring_boot.ecommerce.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -237,6 +234,7 @@ public class CartServiceImpl implements CartService{
             List<ProductDTO> productDTOs = cart.getCartItems().stream().map(p -> {
                 Product product = p.getProduct();
                 ProductDTO map = modelMapper.map(product, ProductDTO.class);
+                map.setQuantity(p.getQuantity());
                 return map;
             }).toList();
             cartDTO.setProducts(productDTOs);

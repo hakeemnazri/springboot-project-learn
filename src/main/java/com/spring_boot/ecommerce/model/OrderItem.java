@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    private Long orderItemId;
 
     private Integer quantity;
 
