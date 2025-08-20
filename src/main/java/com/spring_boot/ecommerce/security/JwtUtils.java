@@ -1,17 +1,21 @@
 package com.spring_boot.ecommerce.security;
 
+import com.spring_boot.ecommerce.security.jwt.services.UserDetailsImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.WebUtils;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
@@ -23,8 +27,12 @@ public class JwtUtils {
 
     @Value("${spring.app.jwtExpirationMs}")
     private int jwtExpirationMs;
+
     @Value("${spring.app.jwtSecret}")
     private String jwtSecret;
+
+    @Value("${spring.app.appCookieName}")
+    private String jwtCookie;
 
     // Getting JWT from Header
     public String getJwtFromHeader(HttpServletRequest request){
@@ -34,6 +42,28 @@ public class JwtUtils {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    public String getJwtFromCookies(HttpServletRequest request){
+        Cookie cookie = WebUtils.getCookie(request, jwtCookie);
+        if(cookie != null){
+            return cookie.getValue();
+        }else{
+            return null;
+        }
+    }
+
+    public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal){
+        String jwt = generateTokenFromUsername(userPrincipal);
+        ResponseCookie cookie = ResponseCookie
+                .from(jwtCookie, jwt)
+                .path("/api")
+                .maxAge(24 * 60 * 60)
+                .httpOnly(false) //TODO:make this true
+                .secure(false)
+                .build();
+
+        return cookie;
     }
 
     //Generate Token from Username
@@ -49,7 +79,6 @@ public class JwtUtils {
     }
 
     //Getting username from JWT Token
-
     public String getUsernameFromJwtToken(String token) {
         return Jwts.parser().verifyWith((SecretKey) key()).build().parseSignedClaims(token).getPayload().getSubject();
     }
@@ -79,12 +108,3 @@ public class JwtUtils {
         return false;
     }
 }
-
-/*
-meja penyerahan kitab
-meja pendaftaran
-bayaran kitab
-susunan meja itu kena tunggu ustaz nabil
-kitab disediakan utk tahap satu. (mukhtasor sahaja)
-tahap 2 guna kitab tahun lepas
- */
