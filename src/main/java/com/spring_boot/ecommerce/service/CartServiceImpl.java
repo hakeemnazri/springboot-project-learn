@@ -244,8 +244,6 @@ public class CartServiceImpl implements CartService{
         return cartDTOs;
     }
 
-
-
     private Cart createCart(){
         Cart userCart = cartRepository.findCartByEmail(authUtil.loggedInEmail());
 

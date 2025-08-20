@@ -33,7 +33,6 @@ public class JwtUtils {
         if(bearerToken != null && bearerToken.startsWith("Bearer ")){
             return bearerToken.substring(7);
         }
-
         return null;
     }
 
