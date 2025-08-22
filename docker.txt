@@ -1,0 +1,57 @@
+version: "3.8"
+services:
+    frontend:
+        build: ./frontend
+        ports:
+            - "3000:80"
+        depends_on:
+            - backend
+            - database // we do not need to spcify this because backend needs this. but its great to type this. docker will auto matically know which container to spin up first
+        networks:
+            - my-custom-network //everybody should be on the same network
+
+    backend:
+        build: ./backend //where is the Dockerfile of image in backend. this will be build first because we do not have a docker image yet
+        ports:
+            - "5001:5000" //mapping local machine to docker port
+        environment: // as per all key value pair in .env file
+            DB_HOST: database
+            DB_USER: postgres
+            DB_PASS: password
+            DB_NAME: postgres
+        depends_on:
+            - database // docker will look what container shold be run first. in this case its the 'database' container
+        networks:
+            - my-custom-network //everybody should be on the same network
+
+    database:
+        image: postgres:16-alpine //first thing to do is o specify image base where should it be run
+        restart: always //if anything happens, restart
+        environment: //env for database
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: postgres
+        volumes:
+            - pgdata:/var/lib/postgresql/data //create directory it could be different for other db
+        networks:
+            - my-custom-network //from created network below
+
+volumes: //for persistent data
+    pgdata: //can be named whatever
+networks:
+    my-custom-network: (name of nework can be whatever)
+        driver: bridge
+
+// how to compose? Ans: docker compose up. it will make the database container, because of the 'depends_on'
+
+
+
+//
+FROM maven:3.8.4-openjdk-17 AS build
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn clean package -DskipTests
+FROM openjdk:17-jdk-slim
+WORKDIR /app

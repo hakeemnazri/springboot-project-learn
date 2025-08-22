@@ -1,5 +1,6 @@
 package com.spring_boot.ecommerce.model;
 
+import com.spring_boot.ecommerce.model.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -56,10 +57,6 @@ public class User {
     @Getter
     @Setter
     @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
-//    @JoinTable(name = "user_address",
-//                joinColumns = @JoinColumn(name = "user_id"),
-//                inverseJoinColumns = @JoinColumn(name = "address_id")
-//    )
     private List<Address> addresses = new ArrayList<>();
 
     @ToString.Exclude
