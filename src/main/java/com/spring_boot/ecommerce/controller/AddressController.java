@@ -22,7 +22,7 @@ public class AddressController {
     AuthUtil authUtil;
 
     @PostMapping("/addresses")
-    public ResponseEntity<AddressDTO> createAddress(AddressDTO addressDTO){
+    public ResponseEntity<AddressDTO> createAddress(@RequestBody AddressDTO addressDTO){
         User user = authUtil.loggedInUser();
 
         AddressDTO address = addressService.createAddress(addressDTO, user);

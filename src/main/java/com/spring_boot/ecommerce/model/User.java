@@ -1,6 +1,5 @@
 package com.spring_boot.ecommerce.model;
 
-import com.spring_boot.ecommerce.model.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -31,7 +30,7 @@ public class User {
     @NotBlank
     @Size(max = 20)
     @Column(name = "username")
-    private String userName;
+    private String username;
 
     @NotBlank
     @Size(max = 50)
@@ -43,8 +42,6 @@ public class User {
     @Size(max = 120)
     private String password;
 
-    @Getter
-    @Setter
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST},
                 fetch = FetchType.EAGER
     )
@@ -54,25 +51,31 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @Getter
-    @Setter
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+    @OneToMany(
+            mappedBy = "user",
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST},
+            orphanRemoval = true
+    )
     private List<Address> addresses = new ArrayList<>();
 
     @ToString.Exclude
-    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToOne(
+            mappedBy = "user",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE}
+    )
     private Cart cart;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "user",
-    cascade = {CascadeType.MERGE, CascadeType.PERSIST},
-    orphanRemoval = true)
+    @OneToMany(
+            mappedBy = "user",
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST},
+            orphanRemoval = true
+    )
     private Set<Product> products;
 
-    public User(String userName, String email, String password) {
-        this.userName = userName;
+    public User(String username, String email, String password) {
+        this.username = username;
         this.email = email;
         this.password = password;
     }
-
 }

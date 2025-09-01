@@ -7,6 +7,7 @@ import com.spring_boot.ecommerce.payload.CategoryDTO;
 import com.spring_boot.ecommerce.payload.CategoryResponse;
 import com.spring_boot.ecommerce.service.CategoryService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +16,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 public class CategoryController {
-    CategoryService categoryService;
 
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
+    @Autowired
+    CategoryService categoryService;
 
     @GetMapping("/public/categories")
     public ResponseEntity<CategoryResponse> getCategories(

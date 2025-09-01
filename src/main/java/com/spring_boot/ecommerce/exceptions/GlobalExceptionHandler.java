@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
             String message = err.getDefaultMessage();
             response.put(fieldName, message);
         });
-        return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST) ;
+        return new ResponseEntity<Map<String, String>>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)

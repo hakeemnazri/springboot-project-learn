@@ -8,7 +8,6 @@ import com.spring_boot.ecommerce.repositories.RoleRepository;
 import com.spring_boot.ecommerce.repositories.UserRepository;
 import com.spring_boot.ecommerce.security.jwt.services.UserDetailsServiceImpl;
 import jakarta.transaction.Transactional;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -139,30 +138,30 @@ public class WebSecurityConfig {
             Set<Role> sellerRoleSet = Set.of(userRole, sellerRole);
             Set<Role> adminRoleSet = Set.of(userRole, sellerRole, adminRole);
 
-            if(!userRepository.existsByUserName("user")){
+            if(!userRepository.existsByUsername("user")){
                 User newUser = new User("user", "user@gmail.com", passwordEncoder.encode("userpassword"));
                 userRepository.save(newUser);
             }
 
-            if(!userRepository.existsByUserName("seller")){
+            if(!userRepository.existsByUsername("seller")){
                 User newSeller = new User("seller", "seller@gmail.com", passwordEncoder.encode("sellerpassword"));
                 userRepository.save(newSeller);
             }
 
-            if(!userRepository.existsByUserName("admin")){
+            if(!userRepository.existsByUsername("admin")){
                 User newAdmin = new User("admin", "admin@gmail.com", passwordEncoder.encode("adminpassword"));
                 userRepository.save(newAdmin);
             }
 
-            userRepository.findByUserName("user").ifPresent(user -> {
+            userRepository.findByUsername("user").ifPresent(user -> {
                     user.setRoles(userRoleSet);
                     userRepository.save(user);
             });
-            userRepository.findByUserName("seller").ifPresent(user -> {
+            userRepository.findByUsername("seller").ifPresent(user -> {
                     user.setRoles(sellerRoleSet);
                     userRepository.save(user);
             });
-            userRepository.findByUserName("admin").ifPresent(user -> {
+            userRepository.findByUsername("admin").ifPresent(user -> {
                     user.setRoles(adminRoleSet);
                     userRepository.save(user);
             });

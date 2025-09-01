@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "products")
 @ToString
-public class Product {
+public class  Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long productId;
